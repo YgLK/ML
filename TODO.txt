@@ -1,0 +1,4 @@
+TODO1:
+
+1. AUtomatycznie maja sie dane pobierac z linku i trzeba to wsadzic do jupyter notebooka
+ + cos tam napisalem w tym notebooku zeby dopracowac
