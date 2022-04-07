@@ -1,5 +1,5 @@
 Deadline:
-  22.04.22r. na ten lab dzisiejszy
+  Na po swietach - tj.  do 22.04.22r. (sprawdzic jeszcze dokladnie) na ten lab dzisiejszy
 
 # Odnosnie zad 7: Tutaj BaggingClassifier z decision tree i max_features=2, 
 # reszta ustawien domyslna trzeba uzyc
