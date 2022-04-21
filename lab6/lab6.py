@@ -256,7 +256,7 @@ smp_clf = BaggingClassifier(DecisionTreeClassifier(), n_estimators=30,
                             random_state=42)
 
 
-# In[37]:
+# In[24]:
 
 
 smp_clf.fit(X_train, y_train)
@@ -274,7 +274,7 @@ smp_acc = [train_acc, test_acc]
 
 # ### Save data in the pickles
 
-# In[39]:
+# In[25]:
 
 
 save_object_as_pickle(smp_acc, "acc_fea.pkl")
@@ -284,7 +284,7 @@ save_object_as_pickle(smp_clf, "fea.pkl")
 
 # ### Check if data saved properly
 
-# In[40]:
+# In[26]:
 
 
 print("acc_fea.pkl\n", pd.read_pickle("acc_fea.pkl"), "\n")
@@ -314,9 +314,12 @@ rank_acc = []
 rank_fea = []
 
 for clf, fea_pair in zip(smp_clf.estimators_, smp_clf.estimators_features_):
-    clf.fit(X_train, y_train)
-    y_pred_test = clf.predict(X_test)
-    y_pred_train = clf.predict(X_train)
+#     clf.fit(X_train, y_train)
+    first_fea = X_all.columns[fea_pair[0]]
+    second_fea = X_all.columns[fea_pair[1]]
+    columns = [first_fea, second_fea]
+    y_pred_test = clf.predict(X_test[columns])
+    y_pred_train = clf.predict(X_train[columns])
     train_acc = accuracy_score(y_train, y_pred_train)
     test_acc = accuracy_score(y_test, y_pred_test)
     print("TRAIN", clf.__class__.__name__,
@@ -324,8 +327,6 @@ for clf, fea_pair in zip(smp_clf.estimators_, smp_clf.estimators_features_):
     print("TEST", clf.__class__.__name__,
           test_acc, "")
     rank_acc.append((train_acc, test_acc))
-    first_fea = X_all.columns[fea_pair[0]]
-    second_fea = X_all.columns[fea_pair[1]]
     print("Features: ", first_fea, " ", second_fea, "\n")
     rank_fea.append([first_fea, second_fea])
 
