@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[71]:
+# In[9]:
 
 
 from sklearn.datasets import fetch_openml
@@ -19,7 +19,7 @@ import pickle
 import timeit
 
 
-# In[56]:
+# In[11]:
 
 
 # method used for saving object as pickle
@@ -30,7 +30,7 @@ def save_object_as_pickle(obj, filename):
 
 # ### Load the data
 
-# In[5]:
+# In[2]:
 
 
 mnist = fetch_openml('mnist_784', version=1, as_frame=False) 
@@ -100,7 +100,7 @@ conf_matrix10
 
 # #### 3.5 Find max value idx of each row
 
-# In[60]:
+# In[ ]:
 
 
 max_val_idxs = []
@@ -110,12 +110,21 @@ for row in conf_matrix10:
 
 # without duplicates 
 no_dupl_max_vals = set(max_val_idxs)
+# LIST should be saved (I forgot to do that...)
+to_be_saved = list(no_dupl_max_vals)
 
 
 # In[61]:
 
 
 no_dupl_max_vals
+
+
+# In[ ]:
+
+
+# this should be saved into kmeans_argmax.pkl file
+to_be_saved
 
 
 # Number for each row in matrix: <br>
@@ -128,34 +137,37 @@ no_dupl_max_vals
 
 no_dupl_max_vals_filename = "kmeans_argmax.pkl"
 
-save_object_as_pickle(no_dupl_max_vals, no_dupl_max_vals_filename)
+# save_object_as_pickle(no_dupl_max_vals, no_dupl_max_vals_filename)
+# correct way (list instead of set should be )
+save_object_as_pickle(to_be_saved, no_dupl_max_vals_filename)
 
 
 # ### DBSCAN
 
-# In[40]:
+# In[5]:
 
 
 norm_val = []
 
 for i in range(300):
-    for j in range(300):
+    for j in range(len(X)):
         if i == j:
             continue
         norm_val.append(np.linalg.norm(X[i] - X[j]))
 
 
-# In[41]:
+# In[18]:
 
 
-norm_val_sorted = np.unique(np.sort(norm_val))
-dist = norm_val_sorted[:10]
+# norm_val_sorted = np.unique(np.sort(norm_val))
+# dist = norm_val_sorted[:10]
+dist = np.sort(norm_val)[:10]
 print(dist)
 
 
 # ### Save distance list in pickle
 
-# In[68]:
+# In[19]:
 
 
 dist_filename = "dist.pkl"
@@ -165,7 +177,7 @@ save_object_as_pickle(dist, dist_filename)
 
 # ### Calculate mean distance
 
-# In[42]:
+# In[20]:
 
 
 s = dist[:3].mean()
@@ -173,17 +185,31 @@ s
 # jest git, 526 wyszlo tez u innych
 
 
-# In[44]:
+# In[21]:
 
 
-s = 526.7181429215666
 print("start ", s)
 print("end ", s+0.1*s)
 print("step ", 0.04*s)
 s_values = np.arange(s, s+0.1*s, step=0.04*s)
 
 
-# In[47]:
+# In[24]:
+
+
+s_values
+
+
+# In[36]:
+
+
+dbscan = DBSCAN(eps=315.8)
+dbscan.fit(X)
+unique = set(dbscan.labels_)
+print(unique)
+
+
+# In[22]:
 
 
 unique_label_num = []
@@ -196,7 +222,7 @@ for epsilon in s_values:
     unique_label_num.append(len(unique))
 
 
-# In[69]:
+# In[23]:
 
 
 unique_label_num
@@ -204,7 +230,7 @@ unique_label_num
 
 # ### Save numbers in pickle
 
-# In[70]:
+# In[33]:
 
 
 uniq_label_name = "dbscan_len.pkl"
@@ -214,7 +240,7 @@ save_object_as_pickle(unique_label_num, uniq_label_name)
 
 # ## Check saved Pickles contents
 
-# In[ ]:
+# In[34]:
 
 
 # check if pickles' contents are saved correctly
